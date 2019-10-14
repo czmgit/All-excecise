@@ -1,0 +1,20 @@
+import tensorflow as tf
+import numpy as np
+v = tf.constant([[1.0,2.0,3.0],[6.0,2.0,4.0],[1.0,2.0,6.0]])
+w = tf.constant([[1.3,2.8,3.6],[1.0,2.2,3.1],[7.4,2.0,3.0]])
+is_train = tf.cast(True,tf.bool)
+with tf.Session() as sess:
+    comp = tf.greater(v, w)
+    print(comp.eval(),'\n')
+    select = tf.where(comp, v, w)
+    print(select.eval(),'\n')
+    loss = tf.reduce_sum(select)
+    print(loss.eval(),'\n')
+    masks = tf.sequence_mask(v)
+    print(masks.eval())
+    temp = tf.cast(masks,np.float32)
+    print(temp.eval(),'\n')
+    print(tf.cast(w,np.float32).eval(),'\n')
+    inputs = tf.cond(is_train,lambda:tf.nn.dropout(w,0.4),lambda:w)
+    # sess.run(inputs,feed_dict={is_train:False})
+    print(inputs.eval())
